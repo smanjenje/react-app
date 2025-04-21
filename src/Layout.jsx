@@ -1,22 +1,26 @@
-// Layout.jsx
-import { Link, Outlet } from "react-router-dom";
+import { Outlet } from "react-router-dom";
 import Sidebar from "./components/Menus/Sidebar";
+import { useMenu } from "./hooks/MenuProvider";
+import Header from "./components/Menus/Header";
 
 function Layout() {
-  return (
-    <div
-      id="page-container"
-      className="mx-auto flex min-h-screen w-full min-w-[320px] flex-col bg-gray-100 transition-all duration-300 ease-out dark:bg-gray-800 dark:text-gray-200"
-    >
-      <Sidebar />
+  const { isMenuOpen, darkMode } = useMenu();
 
-      <main
-        id="page-content"
-        className="flex max-w-full flex-auto flex-col pt-16"
+  return (
+    <div className={darkMode ? "dark" : ""}>
+      <div
+        className={`mx-auto flex min-h-screen w-full min-w-[320px] flex-col bg-gray-100 transition-all duration-300 ease-out dark:bg-gray-800 dark:text-gray-200 
+          ${isMenuOpen ? "lg:ps-64" : ""}`}
       >
-        {/* RENDERIZA A ROTA FILHA AQUI */}
-        <Outlet />
-      </main>
+        <Sidebar />
+        <Header />
+        <main
+          id="page-content"
+          className={`flex max-w-full flex-auto flex-col pt-16`}
+        >
+          <Outlet />
+        </main>
+      </div>
     </div>
   );
 }

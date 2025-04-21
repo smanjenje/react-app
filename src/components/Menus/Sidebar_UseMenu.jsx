@@ -1,24 +1,19 @@
 import React from "react";
-import { useLocation, useNavigate } from "react-router-dom";
-import { useMenu } from "../../hooks/MenuProvider";
+import { useLocation, useNavigate } from "react-router-dom"; // Usando React Router
+import { useMenu } from "../../hooks/useMenu";
+
 
 function Sidebar() {
-  const {
-    isMenuOpen,
-    mobileSidebarOpen,
-    darkMode,
-    menus,
-    toggleDarkMode,
-    closeMenu,
-  } = useMenu();
-
-  const location = useLocation();
-  const navigate = useNavigate();
+  const { stateMenu, toggleDarkMode, closeMenu } = useMenu();
+  const location = useLocation(); // Para verificar o caminho atual
+  const navigate = useNavigate(); // Para navegação programática
 
   const handleClick = (path) => {
-    if (isMenuOpen) closeMenu("isMenuOpen");
-    navigate(path);
-    closeMenu("userDropdownOpen");
+    if (stateMenu.isMenuOpen) {
+      closeMenu("isMenuOpen");
+    }
+    navigate(path); // Navega para o caminho da rota
+    closeMenu("userDropdownOpen"); // Fecha o dropdown de usuário
   };
 
   return (
@@ -26,10 +21,10 @@ function Sidebar() {
       id="page-sidebar"
       className={
         `fixed start-0 top-0 bottom-0 z-50 flex h-full w-64 flex-col border-gray-200 bg-white transition-transform duration-300 ease-out lg:w-64 ltr:border-r rtl:border-l dark:border-gray-700/75 dark:bg-gray-900 ` +
-        (!mobileSidebarOpen
+        (!stateMenu.mobileSidebarOpen
           ? "ltr:-translate-x-full rtl:translate-x-full "
           : "translate-x-0 ") +
-        (!isMenuOpen
+        (!stateMenu.isMenuOpen
           ? "lg:ltr:-translate-x-full lg:rtl:translate-x-full "
           : "lg:ltr:translate-x-0 lg:rtl:translate-x-0 ")
       }
@@ -37,6 +32,7 @@ function Sidebar() {
     >
       {/* Sidebar Header */}
       <div className="flex h-16 items-center justify-between px-5 shadow">
+        {/* Brand */}
         <a
           href="#"
           className="group inline-flex items-center gap-2 font-semibold text-gray-800 dark:text-gray-200"
@@ -62,7 +58,7 @@ function Sidebar() {
           onClick={toggleDarkMode}
           className="inline-flex items-center justify-center text-gray-800 dark:text-gray-200"
         >
-          {!darkMode ? (
+          {!stateMenu.darkMode ? (
             <svg
               xmlns="http://www.w3.org/2000/svg"
               fill="none"
@@ -99,7 +95,7 @@ function Sidebar() {
       {/* Sidebar Navigation */}
       <div className="overflow-y-auto py-4">
         <ul className="space-y-1">
-          {menus.map((item) => (
+          {stateMenu.menus.map((item) => (
             <li key={item.label}>
               <button
                 onClick={() => handleClick(item.path)}

@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 
-export function useMenus() {
+export function useMenu() {
   const [isMenuOpen, setIsMenuOpen] = useState(true);
   const [mobileSidebarOpen, setMobileSidebarOpen] = useState(false);
   const [darkMode, setDarkMode] = useState(() => {
@@ -13,12 +13,12 @@ export function useMenus() {
     { label: "About", icon: "fa-balance-scale", path: "/About", tipo: "link" },
   ];
 
+  const isMenuOpenComputed = isMenuOpen;
+
   const toggleMenu = (menuKey) => {
     if (menuKey === "isMenuOpen") setIsMenuOpen((prev) => !prev);
-    else if (menuKey === "mobileSidebarOpen")
-      setMobileSidebarOpen((prev) => !prev);
-    else if (menuKey === "userDropdownOpen")
-      setUserDropdownOpen((prev) => !prev);
+    else if (menuKey === "mobileSidebarOpen") setMobileSidebarOpen((prev) => !prev);
+    else if (menuKey === "userDropdownOpen") setUserDropdownOpen((prev) => !prev);
   };
 
   const closeMenu = (menuKey) => {
@@ -36,6 +36,7 @@ export function useMenus() {
     });
   };
 
+  // ✅ Aplica a classe dark no body ao carregar
   useEffect(() => {
     document.body.classList.toggle("dark", darkMode);
   }, [darkMode]);
@@ -48,7 +49,7 @@ export function useMenus() {
       userDropdownOpen,
       menus,
     },
-    isMenuOpenComputed: isMenuOpen,
+    isMenuOpenComputed,
     toggleMenu,
     closeMenu,
     toggleDarkMode,
